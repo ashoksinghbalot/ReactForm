@@ -1,25 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
-function App() {
+const UserForm = ({ addUser }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addUser({ name, email });
+    setName('');
+    setEmail('');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Name:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <br />
+      <label>
+        Email:
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <br />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+const UserTable = ({ users }) => {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user, index) => (
+          <tr key={index}>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+const App = () => {
+  const [users, setUsers] = useState([]);
+
+  const addUser = (user) => {
+    setUsers([...users, user]);
+  };
+
+  return (
+    <div>
+      <h1>User Information</h1>
+      <UserForm addUser={addUser} />
+      <UserTable users={users} />
     </div>
   );
-}
+};
 
 export default App;
